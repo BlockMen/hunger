@@ -1,6 +1,6 @@
 Minetest mod "Hunger"
 =====================
-Version: 1.0
+Version: 1.1
 
 (c) Copyright BlockMen (2015)
 
@@ -18,6 +18,12 @@ For more information how to register more food see API.txt
 Information:
 This mod depends on the "Better HUD" mod (https://github.com/BlockMen/hud) to provide information about your current saturation.
 
+
+For Modders:
+~~~~~~~~~~~~
+This mod alters the behavior of minetest.item_eat().
+All callbacks that are registered via minetest.register_on_item_eat() are called AFTER this mod actions, so the itemstack
+will have changed already when callbacks are called. You can get the original itemstack as 6th parameter of your function then.
 
 License:
 ~~~~~~~~

@@ -4,3 +4,12 @@
 - Added API to register food
 - Added eating sounds
 - Hungerbar image changes when poisend
+
+1.1
+---
+- Fixed healing after death
+- Fixed healing while drowning
+- Fixed crashed caused by Pipeworks mod
+- Added wrapper for minetest.item_eat(). see Readme.txt for more informations
+- Updated HUD-API usage
+- Added beans of Farming Redo

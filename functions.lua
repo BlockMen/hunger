@@ -193,6 +193,20 @@ local function poisenp(tick, time, time_left, player)
 	end
 end
 
+-- wrapper for minetest.item_eat (this way we make sure other mods can't break this one)
+local org_eat = core.do_item_eat
+core.do_item_eat = function(hp_change, replace_with_item, itemstack, user, pointed_thing)
+	local old_itemstack = itemstack
+	itemstack = hunger.eat(hp_change, replace_with_item, itemstack, user, pointed_thing)
+	for _, callback in pairs(core.registered_on_item_eats) do
+		local result = callback(hp_change, replace_with_item, itemstack, user, pointed_thing, old_itemstack)
+		if result then
+			return result
+		end
+	end
+	return itemstack
+end
+
 function hunger.eat(hp_change, replace_with_item, itemstack, user, pointed_thing)
 	local item = itemstack:get_name()
 	local def = food[item]
@@ -236,7 +250,20 @@ function hunger.item_eat(hunger_change, replace_with_item, poisen, heal, sound)
 		end
 		minetest.sound_play(sound, {to_player = name, gain = 0.7})
 
-		itemstack:add_item(replace_with_item)
+		if replace_with_item then
+			if itemstack:is_empty() then
+				itemstack:add_item(replace_with_item)
+			else
+				local inv = user:get_inventory()
+				if inv:room_for_item("main", {name=replace_with_item}) then
+					inv:add_item("main", replace_with_item)
+				else
+					local pos = user:getpos()
+					pos.y = math.floor(pos.y + 0.5)
+					core.add_item(pos, replace_with_item)
+				end
+			end
+		end
 	end
 
 	return itemstack

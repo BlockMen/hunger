@@ -47,7 +47,6 @@ if minetest.setting_getbool("enable_damage") then
     -- for exhaustion
     minetest.register_on_placenode(hunger.handle_node_actions)
     minetest.register_on_dignode(hunger.handle_node_actions)
-    minetest.register_on_item_eat(hunger.eat)
     minetest.register_on_respawnplayer(function(player)
 	hunger.update_hunger(player, 20)
     end)

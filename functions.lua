@@ -65,6 +65,10 @@ function hunger.handle_node_actions(pos, oldnode, player, ext)
 		return
 	end
 	local name = player:get_player_name()
+	if not name or not hunger[name] then
+		return
+	end
+	
 	local exhaus = hunger[name].exhaus
 	if not exhaus then
 		hunger[name].exhaus = 0
@@ -96,12 +100,13 @@ function hunger.handle_node_actions(pos, oldnode, player, ext)
 	hunger[name].exhaus = exhaus
 end
 
+
 -- Time based hunger functions
-if minetest.setting_getbool("enable_damage") then
-    local hunger_timer = 0
-    local health_timer = 0
-    local action_timer = 0
-    minetest.register_globalstep(function(dtime)
+local hunger_timer = 0
+local health_timer = 0
+local action_timer = 0
+
+local function hunger_globaltimer(dtime)
 	hunger_timer = hunger_timer + dtime
 	health_timer = health_timer + dtime
 	action_timer = action_timer + dtime
@@ -141,8 +146,8 @@ if minetest.setting_getbool("enable_damage") then
 				local air = player:get_breath() or 0
 				local hp = player:get_hp()
 
-				-- heal player by 1 hp if not dead and saturation is > 15 (of 30)
-				if tonumber(tab.lvl) > HUNGER_HEAL_LVL and air > 0 then
+				-- heal player by 1 hp if not dead and saturation is > 15 (of 30) player is not drowning
+				if tonumber(tab.lvl) > HUNGER_HEAL_LVL and hp > 0 and air > 0 then
 					player:set_hp(hp + HUNGER_HEAL)
 				end
 
@@ -155,7 +160,10 @@ if minetest.setting_getbool("enable_damage") then
 
 		health_timer = 0
 	end
-    end)
+end
+
+if minetest.setting_getbool("enable_damage") then
+	minetest.register_globalstep(hunger_globaltimer)
 end
 
 
@@ -166,9 +174,9 @@ function hunger.register_food(name, hunger_change, replace_with_item, poisen, he
 	food[name] = {}
 	food[name].saturation = hunger_change	-- hunger points added
 	food[name].replace = replace_with_item	-- what item is given back after eating
-	food[name].poisen = poisen		-- time its poisening
-	food[name].healing = heal		-- amount of HP
-	food[name].sound = sound		-- special sound that is played when eating
+	food[name].poisen = poisen				-- time its poisening
+	food[name].healing = heal				-- amount of HP
+	food[name].sound = sound				-- special sound that is played when eating
 end
 
 -- Poison player

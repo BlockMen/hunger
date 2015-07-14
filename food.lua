@@ -253,6 +253,7 @@ if minetest.get_modpath("farming") and farming.mod == "redo" then
 	end
 	register_food("farming:rhubarb", 1)
 	register_food("farming:rhubarb_pie", 6)
+	register_food("farming:beans", 1)
 end
 
 if minetest.get_modpath("kpgmobs") ~= nil then

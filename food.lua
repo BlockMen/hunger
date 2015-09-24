@@ -6,6 +6,11 @@ if minetest.get_modpath("farming") ~= nil then
 	register_food("farming:bread", 4)
 end
 
+if minetest.get_modpath("flowers") ~= nil then
+		register_food("flowers:mushroom_brown", 1)
+		register_food("flowers:mushroom_red", 1, "", 3)
+end
+
 if minetest.get_modpath("mobs") ~= nil then
 	if mobs.mod ~= nil and mobs.mod == "redo" then
 		register_food("mobs:cheese", 4)
@@ -18,7 +23,7 @@ if minetest.get_modpath("mobs") ~= nil then
 		register_food("mobs:chicken_cooked", 6)
 		register_food("mobs:chicken_raw", 2, "", 3)
 		register_food("mobs:chicken_egg_fried", 2)
-		if minetest.get_modpath("bucket") then 
+		if minetest.get_modpath("bucket") then
 			register_food("mobs:bucket_milk", 3, "bucket:bucket_empty")
 		end
 	else

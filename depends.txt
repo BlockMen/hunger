@@ -13,6 +13,7 @@ farming?
 farming_plus?
 ferns?
 fishing?
+flowers?
 fruit?
 glooptest?
 jkanimals?

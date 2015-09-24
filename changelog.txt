@@ -13,3 +13,8 @@
 - Added wrapper for minetest.item_eat(). see Readme.txt for more informations
 - Updated HUD-API usage
 - Added beans of Farming Redo
+
+1.1.1
+-----
+- Fixed unhandled exception (reported by Martin_Devil)
+- Added support for mtg mushrooms

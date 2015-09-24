@@ -68,7 +68,7 @@ function hunger.handle_node_actions(pos, oldnode, player, ext)
 	if not name or not hunger[name] then
 		return
 	end
-	
+
 	local exhaus = hunger[name].exhaus
 	if not exhaus then
 		hunger[name].exhaus = 0
@@ -223,7 +223,10 @@ function hunger.item_eat(hunger_change, replace_with_item, poisen, heal, sound)
     return function(itemstack, user, pointed_thing)
 	if itemstack:take_item() ~= nil and user ~= nil then
 		local name = user:get_player_name()
-		local sat = tonumber(hunger[name].lvl)
+		if not hunger[name] then
+			return itemstack
+		end
+		local sat = tonumber(hunger[name].lvl or 0)
 		local hp = user:get_hp()
 		-- Saturation
 		if sat < HUNGER_MAX and hunger_change then

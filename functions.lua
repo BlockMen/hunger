@@ -212,6 +212,10 @@ function hunger.eat(hp_change, replace_with_item, itemstack, user, pointed_thing
 	local def = food[item]
 	if not def then
 		def = {}
+		if type(hp_change) ~= "number" then
+			hp_change = 1
+			core.log("error", "Wrong on_use() definition for item '" .. item .. "'")
+		end
 		def.saturation = hp_change * 1.3
 		def.replace = replace_with_item
 	end

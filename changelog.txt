@@ -18,3 +18,7 @@
 -----
 - Fixed unhandled exception (reported by Martin_Devil)
 - Added support for mtg mushrooms
+
+1.1.2
+-----
+- Fixed crash on invalid values given

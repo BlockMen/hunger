@@ -20,7 +20,7 @@ end
 function hunger.save(player)
 	local inv = player:get_inventory()
 	local name = player:get_player_name()
-	local value = hunger[name].lvl
+	local value = hunger.players[name].lvl
 	if not inv or not value then
 		return nil
 	end
@@ -40,17 +40,17 @@ function hunger.update_hunger(player, new_lvl)
 		return false
 	end
 	if minetest.setting_getbool("enable_damage") == false then
-		hunger[name] = 20
+		hunger.players[name] = 20
 		return
 	end
-	local lvl = hunger[name].lvl
+	local lvl = hunger.players[name].lvl
 	if new_lvl then
 		 lvl = new_lvl
 	end
 	if lvl > HUNGER_MAX then
 		lvl = HUNGER_MAX
 	end
-	hunger[name].lvl = lvl
+	hunger.players[name].lvl = lvl
 	if lvl > 20 then
 		lvl = 20
 	end
@@ -65,13 +65,13 @@ function hunger.handle_node_actions(pos, oldnode, player, ext)
 		return
 	end
 	local name = player:get_player_name()
-	if not name or not hunger[name] then
+	if not name or not hunger.players[name] then
 		return
 	end
 
-	local exhaus = hunger[name].exhaus
+	local exhaus = hunger.players[name].exhaus
 	if not exhaus then
-		hunger[name].exhaus = 0
+		hunger.players[name].exhaus = 0
 		--return
 	end
 
@@ -91,13 +91,13 @@ function hunger.handle_node_actions(pos, oldnode, player, ext)
 
 	if exhaus > HUNGER_EXHAUST_LVL then
 		exhaus = 0
-		local h = tonumber(hunger[name].lvl)
+		local h = tonumber(hunger.players[name].lvl)
 		if h > 0 then
 			update_hunger(player, h - 1)
 		end
 	end
 
-	hunger[name].exhaus = exhaus
+	hunger.players[name].exhaus = exhaus
 end
 
 
@@ -126,7 +126,7 @@ local function hunger_globaltimer(dtime)
 	if hunger_timer > HUNGER_TICK then
 		for _,player in ipairs(minetest.get_connected_players()) do
 			local name = player:get_player_name()
-			local tab = hunger[name]
+			local tab = hunger.players[name]
 			if tab then
 				local hunger = tab.lvl
 				if hunger > 0 then
@@ -141,7 +141,7 @@ local function hunger_globaltimer(dtime)
 	if health_timer > HUNGER_HEALTH_TICK then
 		for _,player in ipairs(minetest.get_connected_players()) do
 			local name = player:get_player_name()
-			local tab = hunger[name]
+			local tab = hunger.players[name]
 			if tab then
 				local air = player:get_breath() or 0
 				local hp = player:get_hp()
@@ -227,10 +227,10 @@ function hunger.item_eat(hunger_change, replace_with_item, poisen, heal, sound)
     return function(itemstack, user, pointed_thing)
 	if itemstack:take_item() ~= nil and user ~= nil then
 		local name = user:get_player_name()
-		if not hunger[name] then
+		if not hunger.players[name] then
 			return itemstack
 		end
-		local sat = tonumber(hunger[name].lvl or 0)
+		local sat = tonumber(hunger.players[name].lvl or 0)
 		local hp = user:get_hp()
 		-- Saturation
 		if sat < HUNGER_MAX and hunger_change then

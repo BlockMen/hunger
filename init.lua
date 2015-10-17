@@ -1,4 +1,5 @@
 hunger = {}
+hunger.players = {}
 hunger.food = {}
 
 HUNGER_TICK = 800			-- time in seconds after that 1 hunger point is taken
@@ -31,10 +32,10 @@ if minetest.setting_getbool("enable_damage") then
 	inv:set_size("hunger", 1)
 
 	local name = player:get_player_name()
-	hunger[name] = {}
-	hunger[name].lvl = hunger.read(player)
-	hunger[name].exhaus = 0
-	local lvl = hunger[name].lvl
+	hunger.players[name] = {}
+	hunger.players[name].lvl = hunger.read(player)
+	hunger.players[name].exhaus = 0
+	local lvl = hunger.players[name].lvl
 	if lvl > 20 then
 		lvl = 20
 	end

@@ -22,3 +22,7 @@
 1.1.2
 -----
 - Fixed crash on invalid values given
+
+1.1.3
+-----
+- Prevent server crash caused by specific usernames (by beyondlimits)
